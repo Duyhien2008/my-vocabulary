@@ -1,0 +1,215 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Từ Vựng</title>
+  <link rel="stylesheet" href="mai.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="app-header">
+      <div>
+        <h1> Từ Vựng</h1>
+        <p>Giải trí, luyện nhớ và kiểm tra vốn từ tiếng Anh của bạn.</p>
+      </div>
+      <div class="header-actions">
+        <button id="learnModeBtn" class="mode-btn active">Flashcard</button>
+        <button id="quizModeBtn" class="mode-btn">Quiz</button>
+        <button id="darkModeToggle" class="theme-btn" title="Chế độ tối">🌙</button>
+        <button id="deviceToggleBtn" class="theme-btn" title="Chọn thiết bị">📱💻</button>
+      </div>
+    </header>
+
+    <main class="main-grid">
+      <section class="panel panel-main">
+        <div class="panel-top">
+          <div>
+            <label for="categorySelect">Loại từ:</label>
+            <select id="categorySelect"></select>
+          </div>
+          <div>
+            <label for="topicSelect">Chủ đề:</label>
+            <select id="topicSelect"></select>
+          </div>
+          <div>
+            <label for="tagSelect">Tag:</label>
+            <select id="tagSelect"></select>
+          </div>
+          <div>
+            <label for="reviewModeSelect">Ôn tập:</label>
+            <select id="reviewModeSelect">
+              <option value="all">Tất cả</option>
+              <option value="due">Đến hạn</option>
+              <option value="incorrect">Từ sai</option>
+              <option value="starred">Từ sao</option>
+              <option value="new">Từ mới</option>
+            </select>
+          </div>
+          <div>
+            <label for="quizTypeSelect">Loại bài:</label>
+            <select id="quizTypeSelect">
+              <option value="multiple">Trắc nghiệm</option>
+              <option value="typing">Gõ đáp án</option>
+              <option value="match">Nối từ</option>
+              <option value="listen">Nghe và viết</option>
+            </select>
+          </div>
+          <div>
+            <label for="directionSelect">Hướng học:</label>
+            <select id="directionSelect">
+              <option value="enToVn">EN → VN</option>
+              <option value="vnToEn">VN → EN</option>
+            </select>
+          </div>
+          <div>
+            <label for="quizCountSelect">Số câu:</label>
+            <select id="quizCountSelect">
+              <option value="5">5 câu</option>
+              <option value="10" selected>10 câu</option>
+              <option value="15">15 câu</option>
+              <option value="20">20 câu</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="learnPanel" class="card-panel">
+          <div class="card-preview">
+            <div class="card-category" id="flashCategory">Loại từ: -</div>
+            <div class="card-text" id="flashFront">...</div>
+            <div class="card-subtext" id="flashBack"></div>
+          </div>
+          <div class="card-controls">
+            <button id="flipBtn" class="primary-btn">Lật thẻ</button>
+            <button id="flashSpeakBtn" class="secondary-btn">Nghe</button>
+            <button id="prevBtn" class="secondary-btn">Trước</button>
+            <button id="nextBtn" class="secondary-btn">Sau</button>
+          </div>
+        </div>
+
+        <div id="quizPanel" class="card-panel hidden">
+          <div class="question-header">
+            <div id="questionNumber">Câu 1/10</div>
+            <div id="scoreDisplay">Điểm: 0</div>
+          </div>
+          <div class="question-card">
+            <div id="questionText" class="question-text">Chọn đáp án đúng</div>
+            <div id="answersContainer" class="answers"></div>
+            <div id="typingContainer" class="typing-container hidden">
+              <input id="typingInput" type="text" placeholder="Nhập từ tiếng Anh" />
+              <button id="submitTyping" class="primary-btn">Nộp</button>
+            </div>
+            <div id="matchContainer" class="match-container hidden">
+              <div class="match-columns">
+                <div class="match-col">
+                  <div class="match-title">Tiếng Anh</div>
+                  <div id="matchEnglishColumn" class="match-column"></div>
+                </div>
+                <div class="match-col">
+                  <div class="match-title">Tiếng Việt</div>
+                  <div id="matchVietnameseColumn" class="match-column"></div>
+                </div>
+              </div>
+              <div id="matchMessage" class="match-message"></div>
+            </div>
+            <div id="listenContainer" class="typing-container hidden">
+              <button id="listenButton" class="secondary-btn">Nghe từ</button>
+              <input id="listenInput" type="text" placeholder="Viết chính xác từ tiếng Anh" />
+              <button id="submitListen" class="primary-btn">Nộp</button>
+            </div>
+          </div>
+          <div class="quiz-actions">
+            <button id="nextQuizBtn" class="secondary-btn">Câu tiếp</button>
+            <button id="restartBtn" class="danger-btn">Làm lại</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="panel panel-sidebar">
+        <div class="panel-block">
+          <h2>Thêm từ mới</h2>
+          <input id="newWordEng" type="text" placeholder="Từ tiếng Anh" />
+          <input id="newWordVn" type="text" placeholder="Nghĩa tiếng Việt" />
+          <input id="newWordCategory" type="text" placeholder="Loại từ (danh từ, động từ, tính từ...)" />
+          <input id="newWordTopic" type="text" placeholder="Chủ đề (du lịch, tính cách, ...)" />
+          <input id="newWordTags" type="text" placeholder="Tags (phân cách bằng dấu phẩy)" />
+          <div id="vocabList" class="vocab-list"></div>
+        </div>
+        <div class="panel-block">
+          <h2>Quản lý dữ liệu</h2>
+          <div class="data-actions">
+            <button id="exportBtn" class="secondary-btn">Xuất dữ liệu</button>
+            <button id="importBtn" class="secondary-btn">Nhập dữ liệu</button>
+            <input id="importFileInput" type="file" accept="application/json" class="hidden" />
+          </div>
+        </div>
+        <div class="panel-block">
+          <h2>Thống kê</h2>
+          <div id="statsSummary" class="stats-summary"></div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Modal chỉnh sửa từ -->
+    <div id="editModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Chi tiết từ vựng</h2>
+          <button id="closeEditModal" class="close-btn">×</button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <label>Tiếng Anh:</label>
+            <input id="editWordEng" type="text" disabled />
+          </div>
+          <div class="form-group">
+            <label>Tiếng Việt:</label>
+            <input id="editWordVn" type="text" />
+          </div>
+          <div class="form-group">
+            <label>Loại từ:</label>
+            <input id="editWordCategory" type="text" />
+          </div>
+          <div class="form-group">
+            <label>Chủ đề:</label>
+            <input id="editWordTopic" type="text" />
+          </div>
+          <div class="form-group">
+            <label>Tags:</label>
+            <input id="editWordTags" type="text" placeholder="Tags (phân cách bằng dấu phẩy)" />
+          </div>
+          <div class="form-group">
+            <label>Thống kê:</label>
+            <div class="stats-display">
+              <span id="editWordStats">Đúng: 0 | Sai: 0</span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="saveEditWord" class="primary-btn">Lưu thay đổi</button>
+          <button id="cancelEditWord" class="secondary-btn">Hủy</button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Modal chọn thiết bị -->
+    <div id="deviceModal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Chọn thiết bị</h2>
+          <button id="closeDeviceModal" class="close-btn">×</button>
+        </div>
+        <div class="modal-body">
+          <p>Bạn đang sử dụng thiết bị nào để truy cập trang web? (Chọn để điều chỉnh giao diện)</p>
+          <div style="display:flex;gap:10px;justify-content:center;margin-top:12px;">
+            <button id="deviceMobileBtn" class="primary-btn">Điện thoại</button>
+            <button id="deviceDesktopBtn" class="secondary-btn">Máy tính</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
